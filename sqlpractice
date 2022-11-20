@@ -1,0 +1,88 @@
+/* Medical Center */
+
+CREATE TABLE doctors (id SERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL);
+
+
+CREATE TABLE patients (id SERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL);
+
+
+CREATE TABLE visits (id SERIAL PRIMARY KEY, patient_id INTEGER REFERENCES patients, doctor_id INTEGER REFERENCES doctors);
+
+CREATE TABLE diagnosis (id SERIAL PRIMARY KEY, visit_id INTEGER REFERENCES visits, diagnosis TEXT DEFAULT 'Healthy');
+
+
+/* Craigslist */
+
+CREATE TABLE regions (id SERIAL PRIMARY KEY, city TEXT NOT NULL, state_name TEXT NOT NULL);
+
+CREATE TABLE categories (id SERIAL PRIMARY KEY, category TEXT NOT NULL);
+
+CREATE TABLE users (id SERIAL PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL, phone_number TEXT NOT NULL, region_id INTEGER REFERENCES regions);
+
+
+CREATE TABLE posts_c (id SERIAL PRIMARY KEY, poster_id INTEGER REFERENCES users, region_id INTEGER REFERENCES regions, category_id INTEGER REFERENCES categories, title TEXT NOT NULL, post_body TEXT NOT NULL, location_info TEXT NOT NULL);
+
+/* Soccer League */
+
+CREATE TABLE teams (id SERIAL PRIMARY KEY, team_name TEXT NOT NULL);
+
+CREATE TABLE players (id SERIAL PRIMARY KEY, player_name TEXT NOT NULL, team_id INTEGER REFERENCES teams);
+
+CREATE TABLE referees (id SERIAL PRIMARY KEY, ref_name TEXT NOT NULL);
+
+CREATE TABLE matches (id SERIAL PRIMARY KEY, team1 INTEGER REFERENCES teams, team2 INTEGER REFERENCES teams, referee INTEGER REFERENCES referees, score1 INTEGER DEFAULT 0, score2 INTEGER DEFAULT 0);
+
+CREATE TABLE goals (id SERIAL PRIMARY KEY, match_id INTEGER REFERENCES matches, player_id INTEGER REFERENCES players);
+
+
+/* Music.sql */
+
+CREATE TABLE songs
+(
+  id SERIAL PRIMARY KEY,
+  title TEXT NOT NULL,
+  duration_in_seconds INTEGER NOT NULL,
+  release_date DATE NOT NULL,
+  album TEXT NOT NULL,
+);
+
+CREATE TABLE producers (id SERIAL PRIMARY KEY, producer_name TEXT NOT NULL, song_id INTEGER REFERENCES songs);
+
+CREATE TABLE artists (id SERIAL PRIMARY KEY, artist_name TEXT NOT NULL, age INTEGER NOT NULL, song_id INTEGER REFERENCES songs)
+
+
+/* air_traffic.sql */
+
+CREATE TABLE locations (id SERIAL PRIMARY KEY, city TEXT NOT NULL, country TEXT NOT NULL);
+
+CREATE TABLE passengers (id SERIAL PRIMARY KEY, passenger_name TEXT NOT NULL)
+
+CREATE TABLE airlines (id SERIAL PRIMARY KEY, airline TEXT NOT NULL)
+
+CREATE TABLE tickets
+(
+  id SERIAL PRIMARY KEY,
+  passenger_id INTEGER REFERENCES passengers,
+  seat TEXT NOT NULL,
+  departure TIMESTAMP NOT NULL,
+  arrival TIMESTAMP NOT NULL,
+  airline_id INTEGER REFERENCES airlines,
+  from_id INTEGER REFERENCES locations,
+  to_id INTEGER REFERENCES locations,
+);
+
+/* outer_space.sql */
+
+CREATE TABLE galaxies (id SERIAL PRIMARY KEY, galaxy_name TEXT NOT NULL)
+
+CREATE TABLE stars (id SERIAL PRIMARY KEY, galaxy_id INTEGER REFERENCES galaxies, star_name TEXT NOT NULL)
+
+CREATE TABLE planets
+(
+  id SERIAL PRIMARY KEY,
+  name TEXT NOT NULL,
+  orbital_period_in_years FLOAT NOT NULL,
+  star_id INTEGER REFERENCES stars,
+);
+
+CREATE TABLE moons (id SERIAL PRIMARY KEY, planet_id INTEGER REFERENCES planets, moon_name TEXT NOT NULL)
